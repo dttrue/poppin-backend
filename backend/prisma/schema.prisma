@@ -14,18 +14,18 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  first_name      String
-  last_name       String
-  date_of_birth   DateTime
-  created_at      DateTime @default(now())
-  email           String   @unique
+  id               Int      @id @default(autoincrement())
+  first_name       String
+  last_name        String
+  date_of_birth    DateTime
+  created_at       DateTime @default(now())
+  email            String   @unique
   street_address_1 String
   street_address_2 String?
-  city            String
-  state           String
-  zip_code        String
-  reviews         Review[]
+  city             String
+  state            String
+  zip_code         String
+  reviews          Review[]
 
   @@map("users")
 }
@@ -36,21 +36,24 @@ model Review {
   rating      Int
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
+  location    Location @relation(fields: [locationId], references: [id])
+  locationId  Int
   date        DateTime @default(now())
 
   @@map("reviews")
 }
 
 model Location {
-  id              Int      @id @default(autoincrement())
-  name            String
-  created_at      DateTime @default(now())
+  id               Int                @id @default(autoincrement())
+  name             String
+  created_at       DateTime           @default(now())
   street_address_1 String
   street_address_2 String?
-  city            String
-  state           String
-  zip_code        String
-  categories      CategoryLocation[]
+  city             String
+  state            String
+  zip_code         String
+  categories       CategoryLocation[]
+  Review           Review[]
 
   @@map("locations")
 }
