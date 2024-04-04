@@ -26,6 +26,7 @@ model User {
   state            String
   zip_code         String
   reviews          Review[]
+  Link             Link[]
 
   @@map("users")
 }
@@ -54,6 +55,7 @@ model Location {
   zip_code         String
   categories       CategoryLocation[]
   Review           Review[]
+  Link             Link[]
 
   @@map("locations")
 }
@@ -74,4 +76,16 @@ model CategoryLocation {
 
   @@id([categoryId, locationId])
   @@map("categories_locations")
+}
+
+model Link {
+  id         Int      @id @default(autoincrement())
+  url        String   @db.VarChar(255)
+  locationId Int
+  location   Location @relation(fields: [locationId], references: [id])
+  authorId   Int
+  author     User     @relation(fields: [authorId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@map("links")
 }
