@@ -164,10 +164,85 @@ const deleteById = async (req, res) => {
     }
 }
 
+const getMediaLinksByLocation = async (req, res) => {
+    const { id } = req.params; // or req.query, depending on how you're passing the locationId
+
+    try {
+        // Fetch all media links for the given location
+        const mediaLinks = await prisma.link.findMany({
+            where: {
+                locationId: parseInt(id), // Ensure the locationId is treated as a numeric value
+            },
+        });
+
+        if (mediaLinks.length === 0) {
+            // If no media links found for the location, return a message indicating so
+            return res.status(404).send({ message: 'No media links found for the specified location.' });
+        }
+
+        // Return the found media links
+        res.status(200).json({
+            message: 'Media links fetched successfully.',
+            mediaLinks,
+        });
+    } catch (error) {
+        console.error(error);
+        // General error handling
+        res.status(500).send({ message: 'An error occurred while fetching the media links.' });
+    }
+}
+
+const createMediaLinkByLocation = async (req, res) => {
+    const createdAt = new Date().toISOString();
+    const {
+        url,
+        locationId,
+        authorId,
+    } = req.body
+    try {
+        // Check if the URL already exists for the given location
+        const existingMediaLink = await prisma.link.findFirst({
+            where: {
+                AND: [
+                    { url },
+                    { locationId },
+                ],
+            },
+        });
+
+        if (existingMediaLink) {
+            // If the media link already exists, return an error
+            return res.status(400).send({ message: 'This URL already exists for the specified location.' });
+        }
+
+        // If the URL doesn't exist, create the new media link
+        const newMediaLink = await prisma.link.create({
+            data: {
+                url,
+                locationId,
+                authorId,
+                createdAt
+            },
+        });
+
+        // Return the newly created media link
+        res.status(201).json({
+            message: 'Media link successfully created.',
+            mediaLink: newMediaLink,
+        });
+    } catch (error) {
+        console.error(error);
+        // General error handling
+        res.status(500).send({ message: 'An error occurred while creating the media link.' });
+    }
+}
+
 module.exports = {
     index,
     create,
     getById,
     updateById,
-    deleteById 
+    deleteById,
+    getMediaLinksByLocation,
+    createMediaLinkByLocation
 }

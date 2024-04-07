@@ -12,4 +12,8 @@ locationRouter.put("/:id", locationController.updateById);
 
 locationRouter.delete("/:id", locationController.deleteById);
 
+locationRouter.get("/:id/social", locationController.getMediaLinksByLocation);
+
+locationRouter.post("/:id/social", locationController.createMediaLinkByLocation);
+
 module.exports = locationRouter;
