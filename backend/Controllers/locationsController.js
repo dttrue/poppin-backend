@@ -75,6 +75,7 @@ const getById = async (req, res) => {
         const location = await prisma.location.findUnique({
             where: {
                 id: parseInt(id),
+                include: { events: true },
             },
         });
         if (location) {
@@ -206,6 +207,7 @@ const createMediaLinkByLocation = async (req, res) => {
                 AND: [
                     { url },
                     { locationId },
+
                 ],
             },
         });

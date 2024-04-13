@@ -26,10 +26,12 @@ model User {
   state            String
   zip_code         String
   reviews          Review[]
-  Link             Link[]
+  links            Link[]
+  attendedEvents   Event[]  @relation("EventAttendees")  // Add this line
 
   @@map("users")
 }
+
 
 model Review {
   id          Int      @id @default(autoincrement())
@@ -45,20 +47,23 @@ model Review {
 }
 
 model Location {
-  id               Int                @id @default(autoincrement())
+  id               Int        @id @default(autoincrement())
   name             String
-  created_at       DateTime           @default(now())
+  created_at       DateTime   @default(now())
   street_address_1 String
   street_address_2 String?
   city             String
   state            String
   zip_code         String
   categories       CategoryLocation[]
-  Review           Review[]
-  Link             Link[]
+  reviews          Review[]
+  links            Link[]
+  events           Event[]    
 
   @@map("locations")
 }
+
+
 
 model Category {
   id        Int                @id @default(autoincrement())
@@ -89,3 +94,20 @@ model Link {
 
   @@map("links")
 }
+
+model Event {
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String
+  startDate     DateTime
+  endDate       DateTime
+  locationId    Int
+  location      Location  @relation(fields: [locationId], references: [id])
+  attendees     User[]    @relation("EventAttendees")
+
+  @@map("events")
+}
+
+
+
+
