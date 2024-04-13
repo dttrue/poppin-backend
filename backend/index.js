@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors());
 
 // Define routes
-app.use("/location", locationRouter);
+app.use("/locations", locationRouter);
 app.use("/review", reviewRouter);
 app.use("/user", userRouter);
 app.use("/events", eventsRouter);

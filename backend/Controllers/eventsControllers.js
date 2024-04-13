@@ -55,29 +55,36 @@ const getEventById = async (req, res) => {
 // @route POST /events
 
 const createEvent = async (req, res) => {
-    const created_at = new Date().toISOString();
     const {
-        name,
+        title,
         description,
-        date,
-        location_id
+        startDate,
+        endDate,
+        locationId
     } = req.body;
+
+    // Check if required fields are provided
+    if (!title || !startDate || !endDate || !locationId) {
+        return res.status(400).send({ message: "Missing required fields." });
+    }
+
     try {
         const newEvent = await prisma.event.create({
             data: {
-                created_at,
-                name,
+                title,
                 description,
-                date,
-                location_id
+                startDate: new Date(startDate), 
+                endDate: new Date(endDate),
+                locationId: parseInt(locationId)
             }
         });
         res.status(201).json(newEvent);
     } catch (error) {
-        console.error(error);
-}
+        console.error('Failed to create event:', error);
+        res.status(500).send({ message: "Error creating the event", details: error.message });
+    }
+};
 
-}
 
 // desc Update event by id
 // @route PUT /events/:id
