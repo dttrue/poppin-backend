@@ -12,7 +12,7 @@ const app = express();
 const locationRouter = require("./Routes/locationRoute");
 const reviewRouter = require("./Routes/reviewRoute");
 const userRouter = require("./Routes/userRoute");
-// const eventsRouter = require("./Routes/eventsRoute");
+const eventsRouter = require("./Routes/eventsRoute");
 
 
 // Use middleware
@@ -23,7 +23,7 @@ app.use(cors());
 app.use("/location", locationRouter);
 app.use("/review", reviewRouter);
 app.use("/user", userRouter);
-// app.use("/events", eventsRouter);
+app.use("/events", eventsRouter);
 
 // Export the app for further use (e.g., in a server.js file or for testing)
 module.exports = app;
